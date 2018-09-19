@@ -63,10 +63,72 @@ const MyForm = props => {
         placeholder="Enter your Email"
         type="email"
         value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
       />
+      {errors.email &&
+        touched.email && (
+          <div style={{ color: "red", marginTop: ".5rem" }}>{errors.email}</div>
+        )}
+
+      <MySelect
+        value={values.topics}
+        onChange={setFieldValue}
+        onBlur={setFieldTouched}
+        error={errors.topics}
+        touched={touched.topics}
+      />
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        style={{ marginTop: "1em" }}
+      >
+        Submit
+      </button>
     </form>
   );
 };
+
+const options = [
+  { value: "Abantu", label: "Abantu" },
+  { value: "Isayensi", label: "Isayensi" },
+  { value: "William Wilbourforce", label: "William Wilbourforce" },
+  { value: "Ezempilo", label: "Ezempilo" }
+];
+
+class MySelect extends React.Component {
+  //Calls setfieldvalue and manaually update values.topics
+  handleChange = value => {
+    this.props.onChange("topics", value);
+  };
+
+  handleBlur = () => {
+    //Will Call setFieldTouched and manually update touched.topics
+    this.props.onBlur("topics", true);
+  };
+
+  render() {
+    return (
+      <div style={{ marging: "1rem 0", marginTop: "1em" }}>
+        <label htmlFor="color">Topics (select atleast 3)</label>
+        <Select
+          id="color"
+          options={options}
+          isMulti={true}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+          value={this.props.value}
+        />
+        {!!this.props.error &&
+          this.props.touched && (
+            <div style={{ color: "red", marginTop: ".5rem" }}>
+              {this.props.error}
+            </div>
+          )}
+      </div>
+    );
+  }
+}
 
 function App() {
   return (
